@@ -1,4 +1,4 @@
-# Tims2Wme
+# Tims2WME
 
 ## Synopsis
 
