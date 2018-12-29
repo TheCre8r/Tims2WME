@@ -1,14 +1,15 @@
 // ==UserScript==
 // @name         Tims2WME
-// @version      2018.12.28.00
+// @version      2018.12.28.01
 // @author       The_Cre8r
 // @include      https://tims.ncdot.gov/TIMS/*IncidentDetail.aspx?id=*
 // @grant        none
 // ==/UserScript==
+/* global TIMSApp */
+/* global $ */
 
 (function() {
-    function getQueryVariable(variable)
-    {
+    function getQueryVariable(variable) {
         var query = window.location.search.substring(1);
         var vars = query.split("&");
         for (var i=0;i<vars.length;i++) {
@@ -17,8 +18,23 @@
         }
        return(false);
     }
-    $(document).ready(function(){
-        (async function(){
+
+    function bootstrap() {
+        if ($ && TIMSApp) {
+            console.log('Initializing...');
+            //var $ = unsafeWindow.$;
+            init();
+        } else {
+            console.log('Bootstrap failed. Trying again...');
+            setTimeout(function () {
+                bootstrap();
+            }, 250);
+        }
+    }
+
+        async function init(){
+            $.blockUI = function() {}
+            $.unblockUI = function() {}
             console.log("async started");
             let incidents = await $.get('https://tims.ncdot.gov/TIMS/api/incidents');
             console.log(incidents.filter(x => x.Id == timsid))
@@ -33,13 +49,13 @@
                     'color': '#FFFFFF'
                 })
                 $( "#ct100_Waze_Loading" ).remove();
-            }
-            else {
+            } else {
                 console.log("false");
                 $( "#ct100_Waze_Loading" ).remove();
             }
-        })()
-        var timsid = getQueryVariable("id");
+        }
+
+    var timsid = getQueryVariable("id");
         console.log("timsid = "+timsid);
         let pathname = "https://www.waze.com/en-US/editor";
         if ($("#ctl00_linkAdmin").length) {
@@ -58,5 +74,5 @@
         $("#ctl00_Waze").css({
             'color': '#999999'
         })
-    })
+    bootstrap()
 })();
