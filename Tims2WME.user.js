@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Tims2WME
-// @version      2018.09.15.01
+// @version      2018.12.28.00
 // @author       The_Cre8r
 // @include      https://tims.ncdot.gov/TIMS/*IncidentDetail.aspx?id=*
 // @grant        none
@@ -28,6 +28,7 @@
                 //
                 console.log(incident[0].Id);
                 $("#ctl00_Waze").attr("href", "https://www.waze.com/en-US/editor?env=usa&lon="+incident[0].Longitude+"&lat="+incident[0].Latitude+"&zoom=7")
+                $("#ctl00_Waze").attr("target", "_blank")
                 $("#ctl00_Waze").css({
                     'color': '#FFFFFF'
                 })
